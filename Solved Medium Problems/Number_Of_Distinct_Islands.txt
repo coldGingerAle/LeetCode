@@ -1,0 +1,83 @@
+class Solution {
+    private class Island {
+        
+        StringBuilder sb;
+        int startRow;
+        int startCol;
+        int rows;
+        int cols;
+        
+        public Island(int startRow, int startCol, int rows, int cols) {
+            this.sb = new StringBuilder("");
+            this.startRow = startRow;
+            this.startCol = startCol;
+            this.rows = rows;
+            this.cols = cols;
+        }
+        
+        public void add(int row, int col) {
+            int r = row - startRow;
+            int c = col - startCol;
+            sb.append(r + cols * c + " ");
+        }
+        
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) return true;
+            if (!(o instanceof Island)) return false;
+            Island i = (Island) o;
+            String a = sb.toString();
+            String b = i.sb.toString();
+            return a.equals(b);
+        }
+        
+        @Override
+        public int hashCode() {
+            return sb.toString().hashCode();    
+        }
+        
+    }
+    
+    public int numDistinctIslands(int[][] grid) {
+        HashSet<Island> set = new HashSet<Island>();
+        int rows = grid.length;
+        int cols = grid[0].length;
+        boolean[][] marked = new boolean[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (valid(i, j, grid, marked)) {
+                    Island island = new Island(i, j, rows, cols);
+                    dfs(i, j, grid, marked, island);
+                    set.add(island);
+                }
+            }
+        }
+        for (Island i : set) {
+            System.out.println(i.sb.toString());
+        }
+        return set.size();
+    }
+    
+    public boolean valid(int row, int col, int[][] grid, boolean[][] marked) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        return row >= 0 && row < rows && col >= 0 && col < cols && grid[row][col] == 1 && !marked[row][col];
+    }
+    
+    public void dfs(int rootRow, int rootCol, int[][] grid, boolean[][] marked, Island island) {
+        marked[rootRow][rootCol] = true;
+        island.add(rootRow, rootCol);
+        if (valid(rootRow, rootCol-1, grid, marked)) {
+            dfs(rootRow, rootCol-1, grid, marked, island);
+        }
+        if (valid(rootRow+1, rootCol, grid, marked)) {
+            dfs(rootRow+1, rootCol, grid, marked, island);
+        }
+        if (valid(rootRow, rootCol+1, grid, marked)) {
+            dfs(rootRow, rootCol+1, grid, marked, island);
+        }
+        if (valid(rootRow-1, rootCol, grid, marked)) {
+            dfs(rootRow-1, rootCol, grid, marked, island);
+        }
+    }
+}

@@ -1,0 +1,62 @@
+class Solution {
+    
+    private class Pair {
+      int index;
+      int level;
+      public Pair(int index, int level) {
+        this.index = index;
+        this.level = level;
+      }
+      @Override
+      public boolean equals(Object obj) {
+          if ((obj instanceof Pair) && ((Pair)obj).index == index && ((Pair)obj).level == level) {
+            return true; 
+          } else {
+            return false;
+         }
+      }
+      @Override
+      public int hashCode() {
+        int result = 0;
+        result = 104743 * index + 1223 * level;
+        return result;
+      }
+    }
+    
+    public int minimumTotal(List<List<Integer>> triangle) {
+        HashMap<Pair, Integer> hm = new HashMap<Pair, Integer>();
+        return min(triangle, 0, 0, hm);
+    }
+    
+    public int min(List<List<Integer>> triangle, int index, int level, HashMap<Pair, Integer> hm) {
+        if (level == triangle.size() - 1) {
+            return triangle.get(level).get(index);
+        } else {
+            Pair pleft = new Pair(index, level + 1);
+            Pair pright = new Pair(index + 1, level + 1);
+            
+            
+            int left = 0;
+            int right = 0;
+            
+            if (hm.containsKey(pleft)) {
+                left = hm.get(pleft);
+            } else {
+                left = min(triangle, index, level + 1, hm);
+                hm.put(pleft, left);
+            }
+            
+            if (hm.containsKey(pright)) {
+                right = hm.get(pright);
+            } else {
+                right = min(triangle, index + 1, level + 1, hm);
+                hm.put(pright, right);
+            }
+            
+            int currentVal = triangle.get(level).get(index);
+            int leftSum = currentVal + left;
+            int rightSum = currentVal + right;
+            return Math.min(leftSum, rightSum);
+        }
+    }
+}

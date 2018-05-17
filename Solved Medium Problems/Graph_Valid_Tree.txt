@@ -1,0 +1,30 @@
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        if (edges.length != n - 1) return false;
+        List<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<Integer>());
+        }
+        for (int[] pair : edges) {
+            int a = pair[0];
+            int b = pair[1];
+            graph.get(a).add(b);
+            graph.get(b).add(a);
+        }
+        boolean[] marked = new boolean[n];
+        dfs(graph, 0, marked);
+        for (boolean b : marked) {
+            if (!b) return false;
+        }
+        return true;
+    }
+    
+    public void dfs(List<ArrayList<Integer>> graph, Integer root, boolean[] marked) {
+        marked[root] =  true;
+        for (Integer i : graph.get(root)) {
+            if (!marked[i]) {
+                dfs(graph, i, marked);
+            }
+        }
+    }
+}

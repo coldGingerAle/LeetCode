@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int[] findFrequentTreeSum(TreeNode root) {
+        if (root == null) return new int[0];
+        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+        Queue<TreeNode> queue = new ArrayDeque<TreeNode>();
+        queue.add(root);
+        Integer max = 1;
+        while (!queue.isEmpty()) {
+            TreeNode n = queue.remove();
+            int currentSum = sum(n);
+            if (hm.containsKey(currentSum)) {
+                int val = hm.get(currentSum);
+                hm.put(currentSum, val + 1);
+                if (val + 1 > max) max = val + 1;
+            } else {
+                hm.put(currentSum, 1);
+            }
+            if (n.left != null) queue.add(n.left);
+            if (n.right != null) queue.add(n.right);
+        }
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (Map.Entry m : hm.entrySet()) {
+            if ((Integer)m.getValue() == max) list.add((Integer)m.getKey());
+        }
+        int[] output = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            output[i] = list.get(i);
+        }
+        return output;
+    }
+    
+    public int sum(TreeNode root) {
+        if (root == null) return 0;
+        return root.val + sum(root.left) + sum(root.right);
+    }
+}

@@ -1,0 +1,17 @@
+class Solution {
+    public int singleNumber(int[] nums) {
+        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+        for (int i : nums) {
+            if (hm.containsKey(i)) {
+                int val = hm.get(i);
+                hm.put(i, val + 1);
+            } else {
+                hm.put(i, 1);
+            }
+        }
+        for (Map.Entry m : hm.entrySet()) {
+            if ((int)m.getValue() == 1) return (int)m.getKey();
+        }
+        return -1;
+    }
+}

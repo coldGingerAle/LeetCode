@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean checkEqualTree(TreeNode root) {
+        int sum = 0;
+        Queue<TreeNode> queue = new ArrayDeque<TreeNode>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode n = queue.remove();
+            sum += n.val;
+            if (n.left != null) queue.add(n.left);
+            if (n.right != null) queue.add(n.right);
+        }
+        if (sum % 2 != 0) return false;
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode n = queue.remove();
+            if (n != root && getsum(n) == sum / 2) return true;
+            if (n.left != null) queue.add(n.left);
+            if (n.right != null) queue.add(n.right);
+        }
+        return false;
+    }
+    
+    public int getsum(TreeNode root) {
+        if (root == null) return 0;
+        return root.val + getsum(root.left) + getsum(root.right);
+    }
+}

@@ -1,0 +1,46 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        boolean allZeroes = true;
+        for (int i : nums) {
+            if (i != 0) allZeroes = false;
+        }
+        if (allZeroes && nums.length > 2) {
+            Integer[] i = new Integer[] {0, 0, 0};
+            List<Integer> addMe = Arrays.asList(i);
+            List<List<Integer>> output = new LinkedList<List<Integer>>();
+            output.add(addMe);
+            return output;
+        }
+        Arrays.sort(nums);
+        HashSet<LinkedList<Integer>> set = new HashSet<LinkedList<Integer>>();
+        for (int i = 0; i < nums.length; i++) {
+            int currentA = nums[i];
+            LinkedList<Integer> l = new LinkedList<Integer>();
+            l.add(currentA);
+            for (int j = i + 1; j < nums.length; j++) {
+                int currentB = nums[j];
+                int indexC = binarySearch(nums, -1 * (currentA + currentB), j + 1, nums.length - 1);
+                if (indexC > 0) {
+                    l.add(currentB);
+                    l.add(nums[indexC]);
+                    set.add(l);
+                    l = new LinkedList<Integer>();
+                    l.add(currentA);
+                }
+            }
+        }
+        List list = new ArrayList(set);
+        return list;
+    }
+    
+    public static int binarySearch(int[] array, int key, int left, int right) {
+        if (left > right) return -1;
+        int middle = (left + right) / 2;
+        if (array[middle] == key) return middle;
+        else if (key < array[middle]) {
+            return binarySearch(array, key, left, middle -1);
+        } else {
+            return binarySearch(array, key, middle +1, right);
+        }
+    }
+}

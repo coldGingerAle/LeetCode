@@ -1,0 +1,31 @@
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int rows = obstacleGrid.length;
+        int cols = obstacleGrid[0].length;
+        
+        int[][] paths = new int[rows][cols];
+        
+        int r = 0;
+        int d = 0;
+        
+        while (r < cols && obstacleGrid[0][r] != 1) { // place 1s on 1st row until obstacle is encountered
+            paths[0][r++] = 1;
+        }
+        
+        while (d < rows && obstacleGrid[d][0] != 1) { // place 1s on 1st col until obstacle is encountered
+            paths[d++][0] = 1;
+        }
+        
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (obstacleGrid[i][j] == 1) {
+                    paths[i][j] = 0;
+                    continue;
+                }
+                paths[i][j] = paths[i-1][j] + paths[i][j-1];
+            }
+        }
+        
+        return paths[rows-1][cols-1];
+    }
+}

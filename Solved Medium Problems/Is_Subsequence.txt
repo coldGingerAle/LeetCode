@@ -1,0 +1,18 @@
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        Queue<Character> queue = new ArrayDeque<Character>();
+        if (s.length() == 0) return true;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            queue.add(c);
+        }
+        for (int i = 0; i < t.length(); i++) {
+            char c = t.charAt(i);
+            if (queue.peek() == c) {
+                queue.remove();
+            }
+            if (queue.isEmpty()) return true;
+        }
+        return false;
+    }
+}

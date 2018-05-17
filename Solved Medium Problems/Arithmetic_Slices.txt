@@ -1,0 +1,36 @@
+class Solution {
+    public int numberOfArithmeticSlices(int[] A) {
+        int count = 0;
+        boolean prev = false;
+        int N = A.length;
+        for (int i = 2; i <= N; i++) {
+            for (int j = 0; j + i < N; j++) {
+                if (prev) {
+                    if (A[j + i] - A[j + i - 1] == A[j + i - 1] - A[j + i - 2]) {
+                        count++;
+                        prev = true;
+                        continue;
+                    } else {
+                        prev = false;
+                        continue;
+                    }
+                }
+                if (isArithmetic(A, j, j + i)) {
+                    count++;
+                    prev = true;
+                } else {
+                    prev = false;
+                }
+            }
+        }
+        return count;
+    }
+    
+    public boolean isArithmetic(int[] A, int p, int q) {
+        int diff = A[p] - A[p + 1];
+        for (int i = p + 1; i < q; i++) {
+            if (A[i] - A[i+1] != diff) return false;
+        }
+        return true;
+    }
+}

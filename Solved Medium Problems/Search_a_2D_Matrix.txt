@@ -1,0 +1,32 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) return false;
+        int rowNum = binarySearchRow(matrix, target, 0, matrix.length - 1);
+        if (rowNum < 0 || rowNum > matrix.length - 1) return false;
+        int colIndex = binarySearch(matrix[rowNum], target, 0, matrix[rowNum].length - 1);
+        if (colIndex == -1) return false;
+        return true;
+    }
+    
+    public static int binarySearchRow(int[][] matrix, int key, int left, int right) {
+        if (left > right) return right;
+        int middle = (left + right) / 2;
+        if (key == matrix[middle][0]) return middle;
+        else if (key < matrix[middle][0]) {
+            return binarySearchRow(matrix, key, left, middle - 1);
+        } else {
+            return binarySearchRow(matrix, key, middle + 1, right);
+        }
+    }
+    
+    public static int binarySearch(int[] row, int key, int left, int right) {
+        if (left > right) return -1;
+        int middle = (left + right) / 2;
+        if (key == row[middle]) return middle;
+        else if (key < row[middle]) {
+            return binarySearch(row, key, left, middle - 1);
+        } else {
+            return binarySearch(row, key, middle + 1, right);
+        }
+    }
+}

@@ -1,0 +1,48 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode plusOne(ListNode head) {
+        ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+        ListNode current = head;
+        while (current != null) {
+            stack.push(current.val);
+            current = current.next;
+        }
+        boolean carry = false;
+        ArrayDeque<Integer> output = new ArrayDeque<Integer>();
+        int firstval = stack.pop() + 1;
+        if (firstval >= 10) {
+            carry = true;
+            output.push(firstval % 10);
+        } else {
+            output.push(firstval);
+        }
+        while (!stack.isEmpty()) {
+            int val = stack.pop();
+            if (carry) {
+                val++;
+                carry = false;
+            }
+            if (val >= 10) {
+                carry = true;
+                output.push(val % 10);
+            } else {
+                output.push(val);
+            }
+        }
+        if (carry) output.push(1);
+        ListNode h = new ListNode(output.pop());
+        ListNode n = h;
+        while (!output.isEmpty()) {
+            n.next = new ListNode(output.pop());
+            n = n.next;
+        }
+        return h;
+    }
+}

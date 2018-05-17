@@ -1,0 +1,59 @@
+class Solution {
+    
+    private class Point {
+        int row;
+        int col;
+        int dist;
+        public Point(int row, int col, int dist) {
+            this.row = row;
+            this.col = col;
+            this.dist = dist;
+        }
+    }
+    
+    public void wallsAndGates(int[][] rooms) {
+        if (rooms.length == 0) return;
+        int maxRows = rooms.length;
+        int maxCols = rooms[0].length;
+        for (int i = 0; i < maxRows; i++) {
+            for (int j = 0; j < maxCols; j++) {
+                if (rooms[i][j] == 0) {
+                    bfs(new Point(i, j, 0), new boolean[maxRows][maxCols], rooms);
+                }
+            }
+        }
+    }
+    
+    public boolean valid(int row, int col, boolean[][] marked, int[][] rooms) {
+        int maxRows = rooms.length;
+        int maxCols = rooms[0].length;
+        return row >= 0 && row < maxRows && col >= 0 && col < maxCols && !marked[row][col] && rooms[row][col] != -1 && rooms[row][col] != 0;
+    }
+    
+    public void bfs(Point root, boolean[][] marked, int[][] rooms) {
+        Queue<Point> queue = new ArrayDeque<Point>();
+        marked[root.row][root.col] = true;
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Point p = queue.remove();
+            if (p.dist < rooms[p.row][p.col]) rooms[p.row][p.col] = p.dist;
+            if (valid(p.row, p.col-1, marked, rooms)) {
+                marked[p.row][p.col-1] = true;
+                queue.add(new Point(p.row, p.col-1, p.dist+1));
+            }            
+            if (valid(p.row+1, p.col, marked, rooms)) {
+                marked[p.row+1][p.col] = true;
+                queue.add(new Point(p.row+1, p.col, p.dist+1));
+            }            
+            if (valid(p.row, p.col+1, marked, rooms)) {
+                marked[p.row][p.col+1] = true;
+    
+                queue.add(new Point(p.row, p.col+1, p.dist+1));
+            }            
+            if (valid(p.row-1, p.col, marked, rooms)) {
+                marked[p.row-1][p.col] = true;
+                queue.add(new Point(p.row-1, p.col, p.dist+1));
+            }
+        }
+    }
+}
